@@ -1,23 +1,17 @@
-#MySQL 셋팅
-spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/board
-    username: ${DB_USER}
-    password: ${DB_PW}
-  sql:
-    init:
-      mode: NEVER
-  jpa:
-    defer-datasource-initialization: false
-    hibernate:
-      ddl-auto: validate
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
+server:
+  port: 8080
 
-        kakao:
-          rest:
-            api:
-               key: ${KAKAO_REST_API_KEY}
+spring:
+  profiles:
+    active: local
+    group:
+      local:
+        - common
+      prod:
+        - common
+
+---
+spring:
+  config:
+    activate:
+      on-profile: common

@@ -68,30 +68,22 @@ public class KakaoCategorySearchService {
 
     // DocumentDto에서 자료를 뽑아서 길찾기, 로드맵을 추가
     private OutputDto convertDto(DocumentDto documentDto) {
-        // 로드뷰 URL 만들기
-        // https://map.kakao.com/link/roadview/37.49855885145178,127.0263154489116
         String ROAD_VIEW_URL = "https://map.kakao.com/link/roadview/";
-        // 길찾기 URL 만들기
-        // https://map.kakao.com/link/to/강남엘약국,37.49855885145178,127.0263154489116
         String DIRECTION_URL = "https://map.kakao.com/link/to/";
 
         String params = String.join(",", documentDto.getPlaceName(),
                 String.valueOf(documentDto.getLatitude()),
                 String.valueOf(documentDto.getLongitude()));
-        String mapUrl = UriComponentsBuilder
-                .fromUriString(DIRECTION_URL + params)
-                .toUriString();
 
-        // 로드뷰 URL 생성
-        String roadUrl = ROAD_VIEW_URL + documentDto.getLatitude() + "," +
-                documentDto.getLongitude();
+        String mapUrl = DIRECTION_URL + params;
+        String roadUrl = ROAD_VIEW_URL + documentDto.getLatitude() + "," + documentDto.getLongitude();
 
         return OutputDto.builder()
                 .pharmacyName(documentDto.getPlaceName())
                 .pharmacyAddress(documentDto.getAddressName())
-                .directionURL(mapUrl)
-                .roadViewURL(roadUrl)
+                .directionURL(mapUrl)   // ✅ 제대로 된 길찾기 URL
+                .roadViewURL(roadUrl)   // ✅ 로드뷰 URL
                 .distance(String.format("%.0f m", documentDto.getDistance()))
                 .build();
     }
-}
+    }
