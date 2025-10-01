@@ -1,22 +1,23 @@
+# src/main/resources/application-prod.yml
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://${RDS_ENDPOINT}:3306/pharmacy_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: ${MYSQL_USER}
-    password: ${SPRING_DATASOURCE_PASSWORD}
+    username: ${SPRING_DATASOURCE_USERNAME}   # ✅ 기존 MYSQL_USER → SPRING_DATASOURCE_USERNAME
+    password: ${SPRING_DATASOURCE_PASSWORD}   # ✅ 그대로 유지
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
     properties:
       hibernate:
-      format_sql: true
-      use_sql_comments: true
+        format_sql: true
+        use_sql_comments: true
 
 logging:
   level:
     org.hibernate.SQL: debug
-    org.hibernate.type.descriptor.sql.BasicBinder: trace
+    org.hibernate.type.descriptor.sql: trace
 
 kakao:
   api-key: ${KAKAO_REST_API_KEY}

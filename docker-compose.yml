@@ -1,16 +1,10 @@
-version: "3.8"
-
 services:
-  app:
+  pharmacy-app:
     image: pharmacy-app:latest
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: pharmacy-app
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod       # ⭐ 추가: prod 프로파일 사용
+      - RDS_ENDPOINT=pharmacy-db.cd8ooqmm46hx.ap-northeast-1.rds.amazonaws.com
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=soato31211
     ports:
       - "80:8080"
-    env_file:
-      - .env
-    environment:
-      SPRING_PROFILES_ACTIVE: prod
-    restart: always
