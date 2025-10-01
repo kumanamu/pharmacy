@@ -7,24 +7,24 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "pharmacy")
-@Getter
 @Setter
+@Getter
 @NoArgsConstructor
 public class Pharmacy {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String name;   // 약국명
+    @Column(name = "pharmacy_name", nullable = false)
+    private String name;
 
-    @Column(nullable = false)
-    private double latitude;   // 위도
+    @Column(name = "latitude", nullable = false)
+    private double latitude;
 
-    @Column(nullable = false)
-    private double longitude;  // 경도
+    @Column(name = "longitude", nullable = false)
+    private double longitude;
 
-    @Column(nullable = false)
-    private double distance;   // 거리
+    @Column(name = "pharmacy_distance", nullable = false)
+    private double distance;
+
 }
