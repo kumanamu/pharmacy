@@ -33,12 +33,13 @@ public class FormController {
         return handleSearch(address, model);
     }
 
-    // 실제 공통 로직
     private String handleSearch(String address, Model model) {
         log.info("📍 Address received = {}", address);
 
         double[] coords = kakaoAddressSearchService.getCoordinates(address);
-        log.info("📍 Coordinates = lat={}, lon={}", coords[0], coords[1]);
+        double latitude = coords[0];
+        double longitude = coords[1];
+        log.info("📍 Coordinates = lat={}, lon={}", latitude, longitude);
 
         var response = kakaoCategorySearchService.resultCategorySearch(latitude, longitude, 1000);
         log.info("📦 Kakao API returned {} docs", response.getDocumentList().size());
