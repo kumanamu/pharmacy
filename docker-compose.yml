@@ -1,9 +1,10 @@
 services:
   pharmacy-app:
+    build: .
     image: pharmacy-app:latest
     env_file:
       - .env
     environment:
-      - SPRING_PROFILES_ACTIVE=prod   # prod 프로파일만 따로 지정
+      - SPRING_PROFILES_ACTIVE=prod
     ports:
       - "80:8080"
