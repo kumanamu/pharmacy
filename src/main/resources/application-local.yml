@@ -1,16 +1,12 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/pharmacy_db?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: root
-    password: 1111
+    url: jdbc:mysql://${LOCAL_DB_HOST}:${LOCAL_DB_PORT}/${LOCAL_DB_NAME}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ${LOCAL_DB_USER}
+    password: ${LOCAL_DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
-        show_sql: true
         format_sql: true
-
-        KAKAO_REST_API_KEY: 81d4d065de1c56057372ffabaeba33e9
-

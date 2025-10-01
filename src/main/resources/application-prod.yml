@@ -1,12 +1,15 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${RDS_ENDPOINT}:3306/myapp?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-    username: ${SPRING_DATASOURCE_USERNAME}
+    url: jdbc:mysql://${RDS_ENDPOINT}:3306/pharmacy_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ${MYSQL_USER}
     password: ${SPRING_DATASOURCE_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: validate
     properties:
       hibernate:
-        show_sql: false
+        format_sql: true
+
+kakao:
+  api-key: ${KAKAO_REST_API_KEY}
