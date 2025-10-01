@@ -5,12 +5,14 @@ import com.my.pharmacy.service.KakaoAddressSearchService;
 import com.my.pharmacy.service.KakaoCategorySearchService;
 import com.my.pharmacy.service.PharmacyService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class FormController {
@@ -33,27 +35,18 @@ public class FormController {
 
     // 실제 공통 로직
     private String handleSearch(String address, Model model) {
-
-        if (address == null || address.trim().isEmpty()) {
-            model.addAttribute("errorMessage", "주소를 입력하세요.");
-            return "main";
-        }
+        log.info("📍 Address received = {}", address);
 
         double[] coords = kakaoAddressSearchService.getCoordinates(address);
-        double latitude = coords[0];
-        double longitude = coords[1];
+        log.info("📍 Coordinates = lat={}, lon={}", coords[0], coords[1]);
 
         var response = kakaoCategorySearchService.resultCategorySearch(latitude, longitude, 1000);
+        log.info("📦 Kakao API returned {} docs", response.getDocumentList().size());
+
         var result = kakaoCategorySearchService.makeOutputDto(response.getDocumentList());
+        log.info("📋 Processed {} pharmacies", result.size());
 
-        // ✅ 로그 추가
-        System.out.println("=== 검색 요청 주소: " + address);
-        System.out.println("=== 검색 결과 건수: " + result.size());
-
-        // DB 저장
         result.forEach(dto -> {
-            System.out.println("저장 시도 → " + dto); // ✅ 저장 시도 로그
-
             Pharmacy pharmacy = new Pharmacy();
             pharmacy.setName(dto.getPharmacyName());
             pharmacy.setLatitude(dto.getLatitude());
@@ -63,9 +56,8 @@ public class FormController {
             } catch (NumberFormatException e) {
                 pharmacy.setDistance(0.0);
             }
-
+            log.info("➡️ Ready to save: {}", pharmacy.getName());
             pharmacyService.savePharmacy(pharmacy);
-            System.out.println("저장 완료 → " + pharmacy.getName()); // ✅ 저장 완료 로그
         });
 
         model.addAttribute("outputList", result);
