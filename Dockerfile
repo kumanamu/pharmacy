@@ -1,6 +1,8 @@
 FROM amazoncorretto:17.0.12 AS build
 WORKDIR /app
 COPY . .
+# gradlew에 실행 권한 부여
+RUN chmod +x ./gradlew
 # Gradle은 보통 빌드 속도를 높이려고 백그라운드 데몬 프로세스를 띄움.
 # 데몬 안띄우게 하는 것임. -> 속도 빨라짐
 RUN ./gradlew clean bootJar --no-daemon
