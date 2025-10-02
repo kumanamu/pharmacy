@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-
   <meta charset="UTF-8">
   <title>Pharmacy Recommendation System</title>
-  <!--부트스트랩 css 추가-->
   <link rel="stylesheet" href="/css/bootstrap.min.css">
 
   <style>
@@ -17,32 +15,56 @@
         width: 70%;
         height: 550px;
     }
+    .top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 15px;
+    }
   </style>
 </head>
 <body>
-<div>
-  <h2 class="h2-title">Pharmacy Recommendation Results</h2>
+<div class="container">
+  <div class="top-bar">
+    <h2 class="h2-title">Pharmacy Recommendation Results</h2>
+    <button onclick="goBack()" class="btn btn-secondary">뒤로가기</button>
+  </div>
+
+  <!-- 검색창 다시 표시 -->
+  <form action="/search" method="post" style="margin-bottom:20px;">
+    <input type="text" class="form-control" name="address"
+           th:value="${address}"
+           placeholder="주소를 다시 입력하세요">
+    <button type="submit" class="btn btn-primary" style="margin-top:10px;">재검색</button>
+  </form>
+
+  <table class="table table-hover">
+    <tr>
+      <th>약국명</th>
+      <th>약국 주소</th>
+      <th>거리</th>
+      <th>길안내 링크</th>
+      <th>로드뷰 링크</th>
+    </tr>
+    <tr th:each="out : ${outputList}" th:object="${out}">
+      <td th:text="*{pharmacyName}">은혜약국</td>
+      <td th:text="*{pharmacyAddress}">주소는 어쩌구...</td>
+      <td th:text="*{distance}">10cm ?</td>
+      <td><a th:href="*{directionURL}">http://길안내</a></td>
+      <td><a th:href="*{roadViewURL}">http://로드뷰</a></td>
+    </tr>
+  </table>
+
+  <div class="grid-image">
+    <img src="/images/kakao.png" alt="kakao" class="img-responsive img-rounded">
+  </div>
 </div>
 
-<table class="table table-hover">
-  <tr>
-    <th>약국명</th>
-    <th>약국 주소</th>
-    <th>거리</th>
-    <th>길안내 링크</th>
-    <th>로드뷰 링크</th>
-  </tr>
-  <tr th:each="out : ${outputList}" th:object="${out}">
-    <td th:text="*{pharmacyName}">은혜약국</td>
-    <td th:text="*{pharmacyAddress}">주소는 어쩌구...</td>
-    <td th:text="*{distance}">10cm ?</td>
-    <td><a th:href="*{directionURL}" >http://길안내</a></td>
-    <td><a th:href="*{roadViewURL}" >http://로드뷰</a></td>
-  </tr>
-</table>
-<div class="grid-image">
-  <img src="/images/kakao.png" alt="kakao" class="img-responsive img-rounded">
-</div>
 <script src="/js/bootstrap.min.js"></script>
+<script>
+  function goBack() {
+    window.history.back();
+  }
+</script>
 </body>
 </html>

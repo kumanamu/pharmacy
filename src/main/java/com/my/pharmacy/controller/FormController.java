@@ -24,8 +24,8 @@ public class FormController {
     @PostMapping("/search")
     public String searchPharmacyPost(@RequestParam(value = "address", required = false) String address, Model model) {
         if (address == null || address.isBlank()) {
-            model.addAttribute("error", "주소를 입력해주세요.");
-            return "search"; // 다시 입력 페이지
+            model.addAttribute("errorMessage", "주소를 입력해주세요.");
+            return "main"; // 검색창 화면으로
         }
         return handleSearch(address, model);
     }
@@ -33,8 +33,8 @@ public class FormController {
     @GetMapping("/search")
     public String searchPharmacyGet(@RequestParam(value = "address", required = false) String address, Model model) {
         if (address == null || address.isBlank()) {
-            model.addAttribute("error", "주소를 입력해주세요.");
-            return "search";
+            model.addAttribute("errorMessage", "주소를 입력해주세요.");
+            return "main";
         }
         return handleSearch(address, model);
     }
@@ -68,6 +68,7 @@ public class FormController {
         });
 
         model.addAttribute("outputList", result);
+        model.addAttribute("address", address); // 검색 주소도 같이 전달
         return "output";
     }
 }
