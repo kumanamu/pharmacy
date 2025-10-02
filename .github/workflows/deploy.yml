@@ -1,0 +1,48 @@
+name: CI/CD Pharmacy
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - '**'   # main 브랜치 전체 변경사항 감지 (원하면 src/** 로 좁힐 수 있음)
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and Push Backend
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/pharmacy-app:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/pharmacy-app:${{ github.sha }}
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy on EC2 via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            set -e
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/pharmacy-app:latest
+            cd ~/pharmacy || { mkdir -p ~/pharmacy; cd ~/pharmacy; }
+            docker compose -f docker-compose.yml --env-file .env up -d --remove-orphans
