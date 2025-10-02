@@ -2,15 +2,17 @@ version: "3.8"
 
 services:
   pharmacy-app:
-    build: .                # ⭐ 반드시 추가
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: pharmacy-app:latest
     env_file:
       - .env
     environment:
-      - SPRING_PROFILES_ACTIVE=prod
-      - RDS_ENDPOINT=${RDS_ENDPOINT}
-      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
-      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
-      - KAKAO_REST_API_KEY=${KAKAO_REST_API_KEY}
+      SPRING_PROFILES_ACTIVE: prod
+      RDS_ENDPOINT: ${RDS_ENDPOINT}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      KAKAO_REST_API_KEY: ${KAKAO_REST_API_KEY}
     ports:
       - "80:8080"
