@@ -21,15 +21,21 @@ public class FormController {
     private final KakaoCategorySearchService kakaoCategorySearchService;
     private final PharmacyService pharmacyService;
 
-    // POST 요청 처리 (form 제출 시)
     @PostMapping("/search")
-    public String searchPharmacyPost(@RequestParam("address") String address, Model model) {
+    public String searchPharmacyPost(@RequestParam(value = "address", required = false) String address, Model model) {
+        if (address == null || address.isBlank()) {
+            model.addAttribute("error", "주소를 입력해주세요.");
+            return "search"; // 다시 입력 페이지
+        }
         return handleSearch(address, model);
     }
 
-    // GET 요청 처리 (브라우저 직접 호출 시)
     @GetMapping("/search")
-    public String searchPharmacyGet(@RequestParam("address") String address, Model model) {
+    public String searchPharmacyGet(@RequestParam(value = "address", required = false) String address, Model model) {
+        if (address == null || address.isBlank()) {
+            model.addAttribute("error", "주소를 입력해주세요.");
+            return "search";
+        }
         return handleSearch(address, model);
     }
 
